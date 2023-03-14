@@ -1,6 +1,12 @@
 # Define input and output files
 import glob
 
+
+#loading the right modules
+
+module load anaconda3/2021.05
+module load spades/3.15.2
+
 #code to extract id numbers from
 path_fastq_sequenced = "/home/projects/dtu_00009/people/askerb/DIABIMMUNE/*_pe_*"
 
@@ -26,13 +32,14 @@ SIGNALP_OUTPUT = "signalp/signalp.out"
 # Define rule to run SPAdes
 rule spades:
     input:
-        "data/{sample}.fastq.gz"
+        "data/{sample}_pe_1.fastq.gz"
+        "data/{sample}_pe_2.fastq.gz"
     output:
         contigs = CONTIGS,
-        scaffolds = "assembly/scaffolds.fasta",
-    threads: 20
+        scaffolds = "assembly/{sample}/scaffolds.fasta",
+    threads: 40
     shell:
-        "spades.py -o assembly --careful -t {threads} --pe1-1 {input} --pe1-2 {input}"
+        "metaspades.py -t {threads} -1 {input[0]} -2 {input[1]} -k 27,47,67,87,107,127 --memory -o {output.scaffolds} "
 
 # Define rule to run Prodigal for gene prediction
 rule prodigal:
