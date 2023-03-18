@@ -1,4 +1,3 @@
-# Define input and output files
 import glob
 
 
@@ -6,6 +5,9 @@ import glob
 
 module load anaconda3/2021.05
 module load spades/3.15.2
+module load prodigal/2.6.2
+module load signalp/6.0g
+
 
 #code to extract id numbers from
 path_fastq_sequenced = "/home/projects/dtu_00009/people/askerb/DIABIMMUNE/*_pe_*"
@@ -25,9 +27,7 @@ samples = id_list
 #directory of the paired fastq files
 
 
-CONTIGS = "assembly/contigs.fasta"
-PROTEINS = "proteins/proteins.faa"
-SIGNALP_OUTPUT = "signalp/signalp.out"
+
 
 # Define rule to run SPAdes
 rule spades:
@@ -44,17 +44,17 @@ rule spades:
 # Define rule to run Prodigal for gene prediction
 rule prodigal:
     input:
-        contigs = CONTIGS,
+        scaffolds = "assembly/{sample}/scaffolds.fasta" ,
     output:
-        proteins = PROTEINS,
+        proteins = "proteins/{sample}",
     shell:
-        "prodigal -i {input.contigs} -a {output.proteins}"
+        "prodigal -i {input.scaffolds} -o {output.proteins}/genes -a {output.proteins}/{sample}.fasta -p meta"
 
 # Define rule to run SignalP for protein sequence prediction
 rule signalp:
     input:
-        proteins = PROTEINS,
+        protein = "proteins/{sample}/{sample}.fasta",
     output:
-        SIGNALP_OUTPUT,
+        SIGNALP_OUTPUT = ,
     shell:
-        "signalp -t euk -f short -m mature {input.proteins} > {output}"
+        "signalp6 --fastafile {input.protein} --organism other --output_dir signalp_out/{sample}  --format txt --mode fast"
