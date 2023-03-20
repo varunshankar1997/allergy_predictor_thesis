@@ -40,7 +40,12 @@ rule spades:
     threads: 40
     shell:
         "metaspades.py -t {threads} -1 {input[0]} -2 {input[1]} -k 27,47,67,87,107,127 --memory -o {output.scaffolds} "
-
+#Rule to change the scaffoldfile to show the id name
+rule namechage:
+	input:
+	scaffolds = "assembly/{sample}/scaffolds.fasta
+	shell:
+	"python3 name_changer2.py -i {input.scaffolds} -seq {sample}"
 # Define rule to run Prodigal for gene prediction
 rule prodigal:
     input:

@@ -36,6 +36,6 @@ module load spades/3.15.2
 # Make sure that this script is not bigger than 64kb ~ 150 lines, otherwise put in seperat script and execute from here
 
 mem=185
-cmd=" metaspades.py -t 20 -1 /home/projects/dtu_00009/people/askerb/DIABIMMUNE/G80594_pe_1.fastq.gz  -2 /home/projects/dtu_00009/people/askerb/DIABIMMUNE/G80594_pe_2.fastq.gz  -k 27,47,67,87,107,127 --memory $mem -o /home/projects/dtu_00009/people/varsha/spades_test2"
+cmd=" metaspades.py -t 20 -1 /home/projects/dtu_00009/people/askerb/DIABIMMUNE/G80594_pe_1.fastq.gz  -2 /home/projects/dtu_00009/people/askerb/DIABIMMUNE/G80594_pe_2.fastq.gz  -k 27,47,67,87,107,127 --memory $mem -o /home/projects/dtu_00009/people/varsha/spades_test3"
 echo "Doing $cmd"
 $cmd
